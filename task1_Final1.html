@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f7f9fc;
+      color: #333;
+    }
+    #conatainer1 {
+      max-width: 1000px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    ol#displayStudents li {
+      background: #f0f4f8;
+      margin: 8px 0;
+      padding: 12px;
+      border-radius: 8px;
+      transition: transform 0.3s ease-in-out;
+    }
+    ol#displayStudents li:hover {
+      background: #e3eaf3;
+    }
+    .container2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+      padding: 15px 0;
+    }
+    input,
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+      transition: transform 0.2s ease-in-out;
+    }
+    input:focus,
+    select:focus {
+      outline: none;
+      border: 1px solid #4caf50;
+      box-shadow: 0 0 5px rgba(76, 175, 80, 0.4);
+    }
+    button {
+      min-width: 120px;
+      height: 42px;
+      background: linear-gradient(135deg, #4caf50, #45a049);
+      color: white;
+      font-size: 14px;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      transition: transform 0.2s ease-in-out;
+      cursor: pointer;
+    }
+    button:hover {
+      transform: scale(1.07);
+      background: linear-gradient(135deg, #45a049, #3e8e41);
+    }
+    .updateform {
+      margin-top: 20px;
+      background: #f0f4f8;
+      padding: 15px;
+      border-radius: 10px;
+    }
+    .choose {
+      margin-top: 15px;
+    }
+    label {
+      font-size: 14px;
+      font-weight: bold;
+    }
+  </style>
+  <body>
+    <div id="conatainer1">
+      <ol id="displayStudents" style="list-style-type: none"></ol>
+      <button id="addStudents">Add Student</button>
+      <div class="container2">
+        <input type="text" id="sName" placeholder="Enter Name" />
+        <input type="text" id="college" placeholder="Enter College" />
+        <input type="text" id="cgpa" placeholder="Enter CGPA" />
+        <input type="text" id="phone" placeholder="Enter Phone Number" />
+        <input type="text" id="sapId" placeholder="Enter Sap Id" />
+        <input type="text" id="batch" placeholder="Enter Batch" />
+        <input type="text" id="year" placeholder="Enter Year" />
+        <input type="text" id="address" placeholder="Enter Address" />
+      </div>
+      <br />
+      <button id="submitData" style="display: none">Submit Data</button>
+      <button id="updateData" style="display: none; margin-left: 15px">
+        Update Data
+      </button>
+      <button id="deleteData" style="display: none; margin-left: 15px">
+        Delete Data
+      </button>
+    </div>
+    <div class="updateform" style="display: none; margin-top: 20px">
+      <form action="/" id="updateUserData">
+        <input
+          type="text"
+          placeholder="Enter Number"
+          id="upNumber"
+          style="margin-top: auto"
+        />
+        <div class="choose" style="margin-top: 15px">
+          <label for="update" style="font-size: 15px"
+            >Choose data to update:</label
+          >
+          <select
+            name="update"
+            id="upVal"
+            style="
+              width: 150px;
+              margin-left: 10px;
+              text-align: center;
+              border-radius: 5px;
+            "
+          >
+            <option value="" selected disabled>Select Option</option>
+            <option value="studentName">Name</option>
+            <option value="college">College</option>
+            <option value="sapid">Sap Id</option>
+            <option value="cgpa">CGPA</option>
+            <option value="batch">Batch</option>
+            <option value="year">Year</option>
+            <option value="phone">Phone Number</option>
+            <option value="address">Address</option>
+          </select>
+        </div>
+        <input
+          type="text"
+          placeholder="Enter Data"
+          id="update-value"
+          style="margin-top: 15px"
+        />
+        <button id="editData" class="editBtn" style="margin-top: 15px">
+          Edit
+        </button>
+      </form>
+    </div>
+    <input
+      type="text"
+      placeholder="Enter Number"
+      id="delNumber"
+      style="display: none; width: 300px; margin-top: 20px"
+    />
+    <button
+      id="removeData"
+      class="editBtn"
+      style="display: none; margin-top: 10px"
+    >
+      Remove
+    </button>
+  </body>
+  <script>
+    const displayStudents = document.getElementById("displayStudents");
+    const addStudents = document.getElementById("addStudents");
+    const con2 = document.querySelector(".container2");
+    const studentName = document.getElementById("sName");
+    const colName = document.getElementById("college");
+    const cgpa = document.getElementById("cgpa");
+    const phoneNumber = document.getElementById("phone");
+    const Sapid = document.getElementById("sapId");
+    const batch = document.getElementById("batch");
+    const year = document.getElementById("year");
+    const address = document.getElementById("address");
+    const submitData = document.getElementById("submitData");
+    const updateData = document.getElementById("updateData");
+    const deleteData = document.getElementById("deleteData");
+    const input = document.querySelectorAll(".container2 input");
+    const listNumber = document.getElementById("upNumber");
+    const updatingVal = document.getElementById("upVal");
+    const updatedValue = document.getElementById("update-value");
+    const editDataBtn = document.getElementById("editData");
+    const removeDataBtn = document.getElementById("removeData");
+    const delNumber = document.getElementById("delNumber");
+
+    const geturl = "https://studentapi-m7a7.onrender.com/student/all";
+    const url = "https://studentapi-m7a7.onrender.com/student/add";
+    con2.style.display = "none";
+    function getStudentName() {
+      fetch(geturl)
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          displayStudents.innerHTML = "";
+
+          data.students.forEach((student, index) => {
+            const li = document.createElement("li");
+            li.innerHTML = `
+  <span><strong>${index + 1}.</strong></span>
+  <span><strong>Name:</strong> ${student.studentName}</span>
+  <span><strong>College:</strong> ${student.college}</span>
+  <span><strong>CGPA:</strong> ${student.cgpa}</span>
+  <span><strong>Phone:</strong> ${student.phone}</span>
+  <span><strong>SapId:</strong> ${student.sapid}</span>
+  <span><strong>Batch:</strong> ${student.batch}</span>
+  <span><strong>Year:</strong> ${student.year}</span>
+  <span><strong>Address:</strong> ${student.address}</span>
+`;
+            displayStudents.appendChild(li);
+            li.style.fontSize = "18px";
+            li.style.display = "flex";
+            li.style.gap = "20px";
+            li.style.flexWrap = "wrap";
+          });
+        })
+        .catch((error) => console.error(error));
+    }
+
+    getStudentName();
+
+    addStudents.addEventListener("click", () => {
+      if (con2.style.display === "none") {
+        con2.style.display = "grid";
+        submitData.style.display = "inline";
+        updateData.style.display = "inline";
+        deleteData.style.display = "inline";
+      }
+    });
+
+    function addStudent() {
+      const newSapId = Sapid.value.trim();
+      let check = false;
+      input.forEach((inputField) => {
+        if (inputField.value === "") check = true;
+      });
+
+      if (check) {
+        alert("Please fill all the fields");
+        return;
+      }
+
+      fetch(geturl)
+        .then((res) => res.json())
+        .then((data) => {
+          const students = data.students;
+
+          const exists = students.some((student) => student.sapid === newSapId);
+
+          if (exists) {
+            alert("This SAP ID already exists!");
+            return;
+          }
+        })
+        .catch((error) => console.error("Error fetching students:", error));
+      const student = {
+        studentName: studentName.value,
+        college: colName.value,
+        cgpa: cgpa.value,
+        phone: phoneNumber.value,
+        sapid: Sapid.value,
+        batch: batch.value,
+        year: year.value,
+        address: address.value,
+      };
+
+      return fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(student),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          getStudentName();
+          input.forEach((inputField) => (inputField.value = ""));
+        })
+        .catch(() => alert("Error adding student"));
+    }
+
+    submitData.addEventListener("click", () => {
+      delNumber.style.display = "none";
+      removeDataBtn.style.display = "none";
+      document.querySelector(".updateform").style.display = "none";
+      addStudent();
+    });
+
+    updateData.addEventListener("click", () => {
+      delNumber.style.display = "none";
+      removeDataBtn.style.display = "none";
+      document.querySelector(".updateform").style.display = "block";
+    });
+
+    editDataBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      const inputedNum = parseInt(listNumber.value);
+      const dataToUpdate = updatingVal.value;
+      const newData = updatedValue.value;
+      const newSapId = Sapid.value.trim();
+      let defaultStudents = [];
+      fetch(geturl)
+        .then((res) => res.json())
+        .then((data) => {
+          const students = data.students;
+          const exists = students.some((student) => student.sapid === newSapId);
+
+          if (exists) {
+            alert("This SAP ID already exists!");
+            return;
+          }
+          defaultStudents = data.students.filter((s) => s.isDefault);
+          if (
+            isNaN(inputedNum) ||
+            inputedNum <= 0 ||
+            inputedNum > students.length
+          ) {
+            alert("Please enter a valid number");
+            return;
+          }
+
+          if (!dataToUpdate) {
+            alert("Please select a field to update");
+            return;
+          }
+
+          const studentToUpdate = students[inputedNum - 1];
+          if (defaultStudents.includes(studentToUpdate)) {
+            alert("Cannot update default student");
+            return;
+          }
+          const studentId = studentToUpdate._id;
+
+          const updatedObj = {};
+          updatedObj[dataToUpdate] = newData;
+
+          fetch(
+            `https://studentapi-m7a7.onrender.com/student/update/${studentId}`,
+            {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(updatedObj),
+            }
+          )
+            .then((res) => res.json())
+            .then((data) => {
+              getStudentName();
+            })
+            .catch(() => alert("Error updating student"));
+        });
+    });
+
+    deleteData.addEventListener("click", () => {
+      document.querySelector(".updateform").style.display = "none";
+      delNumber.style.display = "inline";
+      removeDataBtn.style.display = "inline";
+    });
+
+    removeDataBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      const inputedNum = parseInt(delNumber.value);
+      let defaultStudents = [];
+
+      fetch(geturl)
+        .then((res) => res.json())
+        .then((data) => {
+          const students = data.students;
+          defaultStudents = data.students.filter((s) => s.isDefault);
+          if (
+            isNaN(inputedNum) ||
+            inputedNum <= 0 ||
+            inputedNum > students.length
+          ) {
+            alert("Please enter a valid number");
+            return;
+          }
+
+          const studentToDelete = students[inputedNum - 1];
+          if (defaultStudents.includes(studentToDelete)) {
+            alert("Cannot delete default student");
+            return;
+          }
+          const studentId = studentToDelete._id;
+          fetch(
+            `https://studentapi-m7a7.onrender.com/student/delete/${studentId}`,
+            {
+              method: "DELETE",
+            }
+          )
+            .then((res) => res.json())
+            .then((data) => {
+              getStudentName();
+              delNumber.value = "";
+            })
+            .catch(() => alert("Error deleting student"));
+        });
+    });
+  </script>
+</html>
